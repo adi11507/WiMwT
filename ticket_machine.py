@@ -1,4 +1,11 @@
-import tkinter as tk
+try:
+    # Python2
+    import Tkinter as Tk
+except ImportError:
+    # Python3
+    import tkinter as tk
+from tkinter import *
+from PIL import Image, ImageTk
 from tkinter import font as tkfont
 
 
@@ -8,7 +15,6 @@ class SampleApp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
         self.title("Biletomat")
         self.geometry("1080x680")
-        self.configure(background='white')
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -35,7 +41,13 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.configure(background='white')
+
+        image = Image.open("example2.jpg")
+        photo_image = ImageTk.PhotoImage(image)
+        self.background_label = Label(self, image=photo_image)
+        self.background_label.image = photo_image
+        self.background_label.grid(rowspan=5, columnspan=3, sticky="news")
+
         label = tk.Label(self, text="Biletomat", font=controller.title_font, fg='white', bg='blue')
         label.grid(row=0, columnspan=3, sticky='nwse')
 
@@ -87,6 +99,11 @@ class Ticket(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.configure(background='white')
+        image = Image.open("example2.jpg")
+        photo_image = ImageTk.PhotoImage(image)
+        self.background_label = Label(self, image=photo_image)
+        self.background_label.image = photo_image
+        self.background_label.grid(rowspan=5, columnspan=3, sticky="news")
 
         label = tk.Label(self, text="Wybierz bilet", font=controller.title_font, fg='white', bg='blue')
         label.grid(row=0, columnspan=4, sticky="nsew", pady=10)
@@ -106,10 +123,10 @@ class Ticket(tk.Frame):
                 counter_reduced -= 1
                 label_reduced_l.config(text=str(counter_reduced), )
 
-        label_reduced = tk.Label(self, text='Bilet 1-godzinny ulgowy: ', height=3, width=20)
+        label_reduced = tk.Label(self, text='Bilet 1-godzinny ulgowy: ', height=3, width=20, bg='yellow')
         label_reduced.grid(row=1, column=0, columnspan=3, pady=5, padx=5)
 
-        label_reduced_l = tk.Label(self, text=str(counter_reduced), height=3, width=4, bg='white')
+        label_reduced_l = tk.Label(self, text=str(counter_reduced), height=3, width=4, bg='yellow')
         label_reduced_l.grid(row=1, column=1, columnspan=2, pady=5)
 
         btn_reduced_up = tk.Button(self, text="+", command=on_click_up_reduced, height=3, width=4)
@@ -129,7 +146,8 @@ class Ticket(tk.Frame):
                 counter_regular -= 1
                 label_regular.config(text='Bilet normalny:   ' + str(counter_regular), )
 
-        label_regular = tk.Label(self, text='Bilet normalny:   ' + str(counter_reduced), height=2, width=20)
+        label_regular = tk.Label(self, text='Bilet normalny:   ' + str(counter_reduced), height=2, width=20,
+                                 bg='yellow')
         label_regular.grid(row=2, column=0, pady=5)
 
         btn_regular_up = tk.Button(self, text="+", command=on_click_up_regular, height=2, width=2)
