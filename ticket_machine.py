@@ -8,9 +8,6 @@ from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import font as tkfont
 
-global counter_reduced
-global counter_regular
-
 
 class SampleApp(tk.Tk):
 
@@ -21,6 +18,9 @@ class SampleApp(tk.Tk):
         self.title_font = tkfont.Font(family='Helvetica', size=20, weight="bold", slant="italic")
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
+        self.counter_reduced = 0
+        self.counter_regular = 0
+        self.sum = 0
 
         self.frames = {}
         for F in (StartPage, Ticket, Card, SeasonTicket, OrdinaryOneTicket, OrdinaryHourTicket,
@@ -28,7 +28,6 @@ class SampleApp(tk.Tk):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
-
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("StartPage")
@@ -36,6 +35,28 @@ class SampleApp(tk.Tk):
     def show_frame(self, page_name):
         frame = self.frames[page_name]
         frame.tkraise()
+
+    def on_click_up(self, label):
+        self.counter_reduced += 1
+        label.configure(text=str(self.counter_reduced))
+
+    def on_click_down(self, label):
+        if (self.counter_reduced-1) is not -1:
+            self.counter_reduced -= 1
+            label.configure(text=str(self.counter_reduced))
+
+    def on_click_up_r(self, label):
+        self.counter_regular += 1
+        label.configure(text=str(self.counter_regular))
+
+    def on_click_down_r(self, label):
+        if (self.counter_regular - 1) is not -1:
+            self.counter_regular -= 1
+            label.configure(text=str(self.counter_regular))
+
+    def calculate_sum(self):
+        self.sum += self.counter_regular * 3.8 + self.counter_reduced * 1.9
+        print(self.sum)
 
 
 class StartPage(tk.Frame):
@@ -289,7 +310,6 @@ class OrdinaryHourTicket(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-
         image = Image.open("example2.jpg")
         photo_image = ImageTk.PhotoImage(image)
         self.background_label = Label(self, image=photo_image)
@@ -318,35 +338,21 @@ class OrdinaryHourTicket(tk.Frame):
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("Ticket"))
 
-        global counter_reduced
-        global counter_regular
-        counter_reduced = 0
-        counter_regular = 0
-
-        def on_click_up():
-            global counter_reduced
-            counter_reduced += 1
-            label_reduced_l.configure(text=str(counter_reduced))
-
-        def on_click_down():
-            global counter_reduced
-            if counter_reduced - 1 is not -1:
-                counter_reduced -= 1
-            label_reduced_l.configure(text=str(counter_reduced))
-
         label_reduced = tk.Label(self, text='Bilet Ulgowy: ', height=3, width=20, bg='gold',
                                  font=('Times New Roman', 20, 'bold'))
         label_reduced.grid(row=1, column=0, padx=70, pady=5, sticky='es')
 
-        label_reduced_l = tk.Label(self, text=str(counter_reduced), height=3, width=5, bg='white',
+        label_reduced_l = tk.Label(self, text=controller.counter_reduced, height=3, width=5, bg='white',
                                    font=('Times New Roman', 20, 'bold'))
         label_reduced_l.grid(row=1, column=0, padx=5, pady=5, sticky='es')
 
-        btn_reduced_up = tk.Button(self, text="+", command=on_click_up, height=2, width=3,
+        btn_reduced_up = tk.Button(self, text="+", command=lambda: controller.on_click_up(label_reduced_l),
+                                   height=2, width=3,
                                    font=('Times New Roman', 30, 'bold'))
         btn_reduced_up.grid(row=1, column=1, padx=50, pady=5, sticky='ws')
 
-        btn_reduced_down = tk.Button(self, text="-", command=on_click_down, height=2, width=3,
+        btn_reduced_down = tk.Button(self, text="-", command=lambda: controller.on_click_down(label_reduced_l),
+                                     height=2, width=3,
                                      font=('Times New Roman', 30, 'bold'))
         btn_reduced_down.grid(row=1, column=1, padx=150, pady=5, sticky="ws")
 
@@ -354,20 +360,20 @@ class OrdinaryHourTicket(tk.Frame):
                                  font=('Times New Roman', 20, 'bold'), bg='gold')
         label_regular.grid(row=2, column=0, padx=70, pady=120, sticky='en')
 
-        label_regular_l = tk.Label(self, text=str(counter_regular), height=3, width=5, bg='white',
+        label_regular_l = tk.Label(self, text=controller.counter_regular, height=3, width=5, bg='white',
                                    font=('Times New Roman', 20, 'bold'))
         label_regular_l.grid(row=2, column=0, padx=5, pady=120, sticky='en')
 
-        btn_regular_up = tk.Button(self, text="+", height=2, width=3,
-                                   font=('Times New Roman', 30, 'bold'))
+        btn_regular_up = tk.Button(self, text="+", height=2, width=3, font=('Times New Roman', 30, 'bold'),
+                                   command=lambda: controller.on_click_up_r(label_regular_l))
         btn_regular_up.grid(row=2, column=1, padx=50, pady=120, sticky='wn')
 
-        btn_regular_down = tk.Button(self, text="-", height=2, width=3,
-                                     font=('Times New Roman', 30, 'bold'))
+        btn_regular_down = tk.Button(self, text="-", height=2, width=3, font=('Times New Roman', 30, 'bold'),
+                                     command=lambda: controller.on_click_down_r(label_regular_l))
         btn_regular_down.grid(row=2, column=1, padx=150, pady=120, sticky='wn')
 
         btn_accept = tk.Button(self, text="Zapłać", height=2, width=20, bg='gold',
-                               command=lambda: controller.show_frame("ForPay"),
+                               command=lambda: [controller.show_frame("ForPay"), controller.calculate_sum()],
                                font=('Times New Roman', 20, 'bold'))
 
         btn_accept.grid(row=2, columnspan=2, pady=30, sticky='s')
@@ -419,9 +425,8 @@ class ForPay(tk.Frame):
                              font=('Times New Roman', 20, 'bold'), bg='gold')
         label_pay.grid(row=2, column=0, padx=70, pady=120, sticky='en')
 
-        global counter_reduced, counter_regular
-
-        label_pay_sum = tk.Label(self, text=(counter_reduced * 1.8 + counter_regular*3.8), height=3, width=5,
+        label_pay_sum = tk.Label(self, text=str(controller.sum),
+                                 height=3, width=5,
                                  bg='white', font=('Times New Roman', 20, 'bold'))
         label_pay_sum.grid(row=2, column=0, padx=5, pady=120, sticky='en')
 

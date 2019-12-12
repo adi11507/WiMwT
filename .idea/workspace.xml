@@ -2,37 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3c4a1977-5c28-4f67-9504-147c703afb98" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/WiMwT.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2b.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dane.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data_visualization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/eksces.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/histogram_seria1.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/histogram_seria2.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/histogram_seria3.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/kurtoza.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/mediana.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/modalna.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/odchylenie_std.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/pdf_h1.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/pdf_h2.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/pdf_h3.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/rozk_praw_1.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/rozk_praw_2.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/rozk_praw_3.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/rozk_praw_all.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/skosnosc.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/srednia.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/standard_deviation.JPG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ticket_machine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/WiMwT.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/WiMwT.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/adi11507.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/adi11507.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_visualization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ticket_machine.py" beforeDir="false" afterPath="$PROJECT_DIR$/ticket_machine.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -55,7 +50,8 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -75,7 +71,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.data_visualization">
+  <component name="RunManager" selected="Python.ticket_machine">
     <configuration name="data_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="WiMwT" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -88,6 +84,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_visualization.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -109,6 +106,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="C:\Users\adria\PycharmProjects\WiMwT\ticket_machine.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -130,6 +128,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/projekt2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -151,6 +150,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sad.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -172,6 +172,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$USER_HOME$/AppData/Local/Temp/Rar$DIa13488.6312/setup.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -193,6 +194,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ticket_machine.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -204,9 +206,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ticket_machine" />
         <item itemvalue="Python.data_visualization" />
         <item itemvalue="Python.setup" />
-        <item itemvalue="Python.ticket_machine" />
         <item itemvalue="Python.projekt2 (1)" />
         <item itemvalue="Python.projekt2" />
       </list>
@@ -222,18 +224,48 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1573564906148</updated>
+      <workItem from="1574771809658" duration="5000" />
+      <workItem from="1574771887604" duration="1257000" />
+      <workItem from="1574775983144" duration="1050000" />
+      <workItem from="1574777155105" duration="1432000" />
+      <workItem from="1574791923847" duration="552000" />
+      <workItem from="1575036503834" duration="7752000" />
+      <workItem from="1575279888868" duration="6159000" />
+      <workItem from="1575398563203" duration="39000" />
+      <workItem from="1575405198487" duration="9242000" />
+      <workItem from="1576148816754" duration="13007000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ticket_machine.py</url>
+          <line>308</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/WiMwT$ticket_machine.coverage" NAME="ticket_machine Coverage Results" MODIFIED="1576162545717" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/WiMwT$data_visualization.coverage" NAME="data_visualization Coverage Results" MODIFIED="1574777451153" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
