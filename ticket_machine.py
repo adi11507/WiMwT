@@ -36,27 +36,39 @@ class SampleApp(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
 
-    def on_click_up(self, label):
+    def on_click_up(self, label1, label2, count):
         self.counter_reduced += 1
-        label.configure(text=str(self.counter_reduced))
+        label1.configure(text=str(self.counter_reduced))
+        self.sum += count
+        if self.sum <= 0:
+            self.sum = 0
+        label2.configure(text=str("{0:.2f}".format(self.sum)))
 
-    def on_click_down(self, label):
-        if (self.counter_reduced-1) is not -1:
+    def on_click_down(self, label1, label2, count):
+        if (self.counter_reduced-1) != -1:
             self.counter_reduced -= 1
-            label.configure(text=str(self.counter_reduced))
+            label1.configure(text=str(self.counter_reduced))
+            self.sum -= count
+            if self.sum <= 0:
+                self.sum = 0
+            label2.configure(text=str("{0:.2f}".format(self.sum)))
 
-    def on_click_up_r(self, label):
+    def on_click_up_r(self, label1, label2, count):
         self.counter_regular += 1
-        label.configure(text=str(self.counter_regular))
+        label1.configure(text=str(self.counter_regular))
+        self.sum += count
+        if self.sum <= 0:
+            self.sum = 0
+        label2.configure(text=str("{0:.2f}".format(self.sum)))
 
-    def on_click_down_r(self, label):
+    def on_click_down_r(self, label1, label2, count):
         if (self.counter_regular - 1) is not -1:
             self.counter_regular -= 1
-            label.configure(text=str(self.counter_regular))
-
-    def calculate_sum(self):
-        self.sum += self.counter_regular * 3.8 + self.counter_reduced * 1.9
-        print(self.sum)
+            label1.configure(text=str(self.counter_regular))
+            self.sum -= count
+            if self.sum <= 0:
+                self.sum = 0
+            label2.configure(text=str("{0:.2f}".format(self.sum)))
 
 
 class StartPage(tk.Frame):
@@ -337,54 +349,59 @@ class OrdinaryHourTicket(tk.Frame):
         button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("Ticket"))
+        button_back.grid(row=3, columnspan=2, pady=5)
 
         label_reduced = tk.Label(self, text='Bilet Ulgowy: ', height=3, width=20, bg='gold',
                                  font=('Times New Roman', 20, 'bold'))
-        label_reduced.grid(row=1, column=0, padx=70, pady=5, sticky='es')
+        label_reduced.grid(row=1, column=0, padx=50, pady=5, sticky='ws')
 
         label_reduced_l = tk.Label(self, text=controller.counter_reduced, height=3, width=5, bg='white',
                                    font=('Times New Roman', 20, 'bold'))
-        label_reduced_l.grid(row=1, column=0, padx=5, pady=5, sticky='es')
+        label_reduced_l.grid(row=1, column=0, padx=200, pady=5, sticky='es')
 
-        btn_reduced_up = tk.Button(self, text="+", command=lambda: controller.on_click_up(label_reduced_l),
-                                   height=2, width=3,
-                                   font=('Times New Roman', 30, 'bold'))
-        btn_reduced_up.grid(row=1, column=1, padx=50, pady=5, sticky='ws')
+        btn_reduced_up = tk.Button(self, text="+", height=2, width=3, font=('Times New Roman', 30, 'bold'),
+                                   command=lambda: controller.on_click_up(label_reduced_l, label_pay_sum, 1.9))
+        btn_reduced_up.grid(row=1, column=0, padx=110, pady=5, sticky='es')
 
-        btn_reduced_down = tk.Button(self, text="-", command=lambda: controller.on_click_down(label_reduced_l),
-                                     height=2, width=3,
-                                     font=('Times New Roman', 30, 'bold'))
-        btn_reduced_down.grid(row=1, column=1, padx=150, pady=5, sticky="ws")
+        btn_reduced_down = tk.Button(self, text="-", height=2, width=3, font=('Times New Roman', 30, 'bold'),
+                                     command=lambda: controller.on_click_down(label_reduced_l, label_pay_sum, 1.9))
+        btn_reduced_down.grid(row=1, column=0, padx=20, pady=5, sticky="es")
 
         label_regular = tk.Label(self, text='Bilet normalny: ', height=3, width=20,
                                  font=('Times New Roman', 20, 'bold'), bg='gold')
-        label_regular.grid(row=2, column=0, padx=70, pady=120, sticky='en')
+        label_regular.grid(row=2, column=0, padx=50, pady=60, sticky='wn')
 
         label_regular_l = tk.Label(self, text=controller.counter_regular, height=3, width=5, bg='white',
                                    font=('Times New Roman', 20, 'bold'))
-        label_regular_l.grid(row=2, column=0, padx=5, pady=120, sticky='en')
+        label_regular_l.grid(row=2, column=0, padx=200, pady=60, sticky='en')
 
         btn_regular_up = tk.Button(self, text="+", height=2, width=3, font=('Times New Roman', 30, 'bold'),
-                                   command=lambda: controller.on_click_up_r(label_regular_l))
-        btn_regular_up.grid(row=2, column=1, padx=50, pady=120, sticky='wn')
+                                   command=lambda: controller.on_click_up_r(label_regular_l, label_pay_sum, 3.8))
+        btn_regular_up.grid(row=2, column=0, padx=110, pady=60, sticky='en')
 
         btn_regular_down = tk.Button(self, text="-", height=2, width=3, font=('Times New Roman', 30, 'bold'),
-                                     command=lambda: controller.on_click_down_r(label_regular_l))
-        btn_regular_down.grid(row=2, column=1, padx=150, pady=120, sticky='wn')
+                                     command=lambda: controller.on_click_down_r(label_regular_l, label_pay_sum, 3.8))
+        btn_regular_down.grid(row=2, column=0, padx=20, pady=60, sticky='en')
 
         btn_accept = tk.Button(self, text="Zapłać", height=2, width=20, bg='gold',
-                               command=lambda: [controller.show_frame("ForPay"), controller.calculate_sum()],
+                               command=lambda: controller.show_frame("ForPay"),
                                font=('Times New Roman', 20, 'bold'))
-
         btn_accept.grid(row=2, columnspan=2, pady=30, sticky='s')
 
-        button_back.grid(row=3, columnspan=2, pady=5)
+        label_pay = tk.Label(self, text='Do zapłaty: ', height=3, width=20,
+                             font=('Times New Roman', 20, 'bold'), bg='gold')
+        label_pay.grid(row=2, column=1, padx=70, pady=5, sticky='n')
+
+        label_pay_sum = tk.Label(self, text=str(controller.sum),
+                                 height=3, width=5,
+                                 bg='white', font=('Times New Roman', 20, 'bold'))
+        label_pay_sum.grid(row=2, column=1, padx=55, pady=5, sticky='ne')
 
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=0)
         self.rowconfigure(0, weight=0)
         self.rowconfigure(1, weight=1)
-        self.rowconfigure(2, weight=0)
+        self.rowconfigure(2, weight=1)
         self.rowconfigure(3, weight=0)
 
 
@@ -421,14 +438,12 @@ class ForPay(tk.Frame):
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("OrdinaryHourTicket"))
 
-        label_pay = tk.Label(self, text='Do zapłaty\n pozostało', height=3, width=20,
-                             font=('Times New Roman', 20, 'bold'), bg='gold')
-        label_pay.grid(row=2, column=0, padx=70, pady=120, sticky='en')
-
-        label_pay_sum = tk.Label(self, text=str(controller.sum),
-                                 height=3, width=5,
-                                 bg='white', font=('Times New Roman', 20, 'bold'))
-        label_pay_sum.grid(row=2, column=0, padx=5, pady=120, sticky='en')
+        button_cash = tk.Button(self, text="Gotówka", bg='gold', height=7, width=15,
+                                font=('Times New Roman', 25, 'bold'))
+        button_cash.grid(row=1, column=0, padx=20, pady=5, sticky='e')
+        button_card = tk.Button(self, text="Karta", bg='gold', height=7, width=15,
+                                font=('Times New Roman', 25, 'bold'))
+        button_card.grid(row=1, column=1, padx=20, pady=5, sticky='w')
 
         button_back.grid(row=3, columnspan=2, pady=5)
         self.columnconfigure(0, weight=0)
