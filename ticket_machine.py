@@ -43,7 +43,7 @@ class SampleApp(tk.Tk):
 
         self.frames = {}
         for F in (StartPage, Ticket, Card, SeasonTicket, OrdinaryOneTicket, OrdinaryHourTicket,
-                  HourOrNight, TwentyForHours, ForPay, Metro):
+                  HourOrNight, TwentyForHours, ForPay, Metro, Info):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -109,8 +109,9 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Biletomat", font=controller.title_font, fg='white', bg='blue')
         label.grid(row=0, columnspan=3, sticky='nwse')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=2, pady=5, padx=40, sticky='se')
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=2, pady=5, padx=40, sticky='es')
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
@@ -153,7 +154,6 @@ class Ticket(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-
         photo_image, photo_pl, photo_en = open_images()
         self.background_label = Label(self, image=photo_image)
         self.background_label.image = photo_image
@@ -164,14 +164,11 @@ class Ticket(tk.Frame):
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
         self.en_label = Button(self, image=photo_en)
         self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
-
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
         button1_1 = tk.Button(self, text="1-przejazd\n linie zwykłe", height=6, width=20, bg='gold',
                               font=('Times New Roman', 20, "bold"),
@@ -187,15 +184,19 @@ class Ticket(tk.Frame):
                               bg='gold', font=('Times New Roman', 20, "bold"),
                               command=lambda: controller.show_frame("TwentyForHours"))
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
+
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("StartPage"))
 
-        button_back.grid(row=3, columnspan=2, pady=5)
-        button1_1.grid(row=1, column=0, pady=30, padx=50, sticky='es')
-        button1_2.grid(row=2, column=0, pady=30, padx=50, sticky='e')
-        button1_3.grid(row=1, column=1, pady=30, padx=50, sticky='ws')
-        button1_4.grid(row=2, column=1, pady=30, padx=50, sticky='w')
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+        button1_1.grid(row=1, column=0, pady=30, padx=70, sticky='es')
+        button1_2.grid(row=2, column=0, pady=30, padx=70, sticky='e')
+        button1_3.grid(row=1, column=1, pady=30, padx=70, sticky='ws')
+        button1_4.grid(row=2, column=1, pady=30, padx=70, sticky='w')
 
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=0)
@@ -227,11 +228,15 @@ class SeasonTicket(tk.Frame):
         self.en_label.image = photo_en
         self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
+
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("StartPage"))
 
-        button_back.grid(row=3, columnspan=2, pady=5)
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=0)
@@ -257,20 +262,21 @@ class Card(tk.Frame):
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
         self.en_label = Button(self, image=photo_en)
         self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("StartPage"))
 
-        button_back.grid(row=3, columnspan=2, pady=5)
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         self.s = ttk.Style()
         self.s.configure("colour.Horizontal.TProgressbar", foreground="white", background="green")
@@ -318,26 +324,27 @@ class OrdinaryOneTicket(tk.Frame):
         self.background_label.image = photo_image
         self.background_label.grid(rowspan=4, columnspan=2, sticky="news")
 
-        self.pl_label = Button(self, image=photo_pl)
-        self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
-
-        self.en_label = Button(self, image=photo_en)
-        self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
-
         self.label = tk.Label(self, text="Wybierz rodzaj ulgi", font=controller.title_font, fg='white', bg='blue')
         self.label.grid(row=0, columnspan=3, sticky='nwse')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        self.pl_label = Button(self, image=photo_pl)
+        self.pl_label.image = photo_pl
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        self.en_label = Button(self, image=photo_en)
+        self.en_label.image = photo_en
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
+
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
+
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: [controller.show_frame("Ticket"), controller.update_variables(),
                                                  update_labels(label_reduced_l, label_regular_l, label_pay_sum)])
 
-        button_back.grid(row=3, columnspan=2, pady=5)
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         label_reduced = tk.Label(self, text='Bilet Ulgowy: ', height=3, width=20, bg='gold',
                                  font=('Times New Roman', 20, 'bold'))
@@ -381,7 +388,7 @@ class OrdinaryOneTicket(tk.Frame):
         label_pay.grid(row=2, column=1, padx=70, pady=5, sticky='n')
 
         label_pay_sum = tk.Label(self, text=str(controller.sum),
-                                 height=3, width=5,
+                                 height=3, width=6,
                                  bg='white', font=('Times New Roman', 20, 'bold'))
         label_pay_sum.grid(row=2, column=1, padx=55, pady=5, sticky='ne')
 
@@ -408,20 +415,22 @@ class OrdinaryHourTicket(tk.Frame):
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
         self.en_label = Button(self, image=photo_en)
         self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: [controller.show_frame("Ticket"), controller.update_variables(),
                                                  update_labels(label_reduced_l, label_regular_l, label_pay_sum)])
-        button_back.grid(row=3, columnspan=2, pady=5)
+
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         label_reduced = tk.Label(self, text='Bilet Ulgowy: ', height=3, width=20, bg='gold',
                                  font=('Times New Roman', 20, 'bold'))
@@ -465,7 +474,7 @@ class OrdinaryHourTicket(tk.Frame):
         label_pay.grid(row=2, column=1, padx=70, pady=5, sticky='n')
 
         label_pay_sum = tk.Label(self, text=str(controller.sum),
-                                 height=3, width=5,
+                                 height=3, width=6,
                                  bg='white', font=('Times New Roman', 20, 'bold'))
         label_pay_sum.grid(row=2, column=1, padx=55, pady=5, sticky='ne')
 
@@ -492,33 +501,61 @@ class ForPay(tk.Frame):
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
         self.en_label = Button(self, image=photo_en)
         self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("OrdinaryHourTicket"))
 
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+
         button_cash = tk.Button(self, text="Gotówka", bg='gold', height=7, width=15,
                                 font=('Times New Roman', 25, 'bold'))
-        button_cash.grid(row=1, column=0, padx=20, pady=5, sticky='e')
+        button_cash.grid(row=1, column=0, padx=5, sticky='e')
         button_card = tk.Button(self, text="Karta", bg='gold', height=7, width=15,
-                                font=('Times New Roman', 25, 'bold'))
-        button_card.grid(row=1, column=1, padx=20, pady=5, sticky='w')
+                                font=('Times New Roman', 25, 'bold'),
+                                command=self.run_progressbar)
+        button_card.grid(row=1, column=1, padx=5, sticky='')
 
-        button_back.grid(row=3, columnspan=2, pady=5)
+        self.s1 = ttk.Style()
+        self.s1.configure("colour.Horizontal.TProgressbar", foreground="white", background="green")
+        self.progress_bar = Progressbar(self, style="colour.Horizontal.TProgressbar",
+                                        orient=VERTICAL, length=281, mode='determinate')
+
+        self.label1 = tk.Label(self, text="Zapłacono. Odbierz bilety!!", height=3, width=30, fg='white', bg='blue',
+                               font=('Times New Roman', 18, 'bold'))
+
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=0)
         self.rowconfigure(0, weight=0)
         self.rowconfigure(1, weight=1)
         self.rowconfigure(2, weight=0)
         self.rowconfigure(3, weight=0)
+
+    def run_progressbar(self):
+        self.progress_bar.grid(row=1, column=1, padx=150, sticky='e')
+        self.progress_bar["maximum"] = 100
+
+        for i in range(101):
+            time.sleep(0.025)
+            self.progress_bar["value"] = i
+            self.progress_bar.update()
+
+        if self.progress_bar["maximum"] == self.progress_bar["value"]:
+            self.progress_bar.after(1, self.progress_bar.grid_remove)
+            self.label1.grid(row=1, columnspan=2, sticky='s', pady=50)
+            self.label1.update()
+            time.sleep(3)
+            self.label1.grid_remove()
+            self.controller.show_frame("StartPage")
 
 
 class HourOrNight(tk.Frame):
@@ -536,20 +573,22 @@ class HourOrNight(tk.Frame):
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
         self.en_label = Button(self, image=photo_en)
         self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: [controller.show_frame("Ticket"), controller.update_variables(),
                                                  update_labels(label_reduced_l, label_regular_l, label_pay_sum)])
-        button_back.grid(row=3, columnspan=2, pady=5)
+
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         label_reduced = tk.Label(self, text='Bilet Ulgowy: ', height=3, width=20, bg='gold',
                                  font=('Times New Roman', 20, 'bold'))
@@ -593,7 +632,7 @@ class HourOrNight(tk.Frame):
         label_pay.grid(row=2, column=1, padx=70, pady=5, sticky='n')
 
         label_pay_sum = tk.Label(self, text=str(controller.sum),
-                                 height=3, width=5,
+                                 height=3, width=6,
                                  bg='white', font=('Times New Roman', 20, 'bold'))
         label_pay_sum.grid(row=2, column=1, padx=55, pady=5, sticky='ne')
 
@@ -610,35 +649,32 @@ class TwentyForHours(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        image = Image.open("example2.jpg")
-        photo_image = ImageTk.PhotoImage(image)
-        self.background_label = Label(self, image=photo_image)
+        photo_image, photo_pl, photo_en = open_images()
+        self.background_label = tk.Label(self, image=photo_image)
         self.background_label.image = photo_image
         self.background_label.grid(rowspan=4, columnspan=2, sticky="news")
 
         label = tk.Label(self, text="Wybierz rodzaj ulgi", font=controller.title_font, fg='white', bg='blue')
         label.grid(row=0, columnspan=3, sticky='nwse')
 
-        image_pl = Image.open("poland.png")
-        photo_pl = ImageTk.PhotoImage(image_pl)
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
-        image_en = Image.open("england.png")
-        photo_en = ImageTk.PhotoImage(image_en)
         self.en_label = Button(self, image=photo_en)
         self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: [controller.show_frame("Ticket"), controller.update_variables(),
                                                  update_labels(label_reduced_l, label_regular_l, label_pay_sum)])
-        button_back.grid(row=3, columnspan=2, pady=5)
+
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         label_reduced = tk.Label(self, text='Bilet Ulgowy: ', height=3, width=20, bg='gold',
                                  font=('Times New Roman', 20, 'bold'))
@@ -682,7 +718,7 @@ class TwentyForHours(tk.Frame):
         label_pay.grid(row=2, column=1, padx=70, pady=5, sticky='n')
 
         label_pay_sum = tk.Label(self, text=str(controller.sum),
-                                 height=3, width=5,
+                                 height=3, width=6,
                                  bg='white', font=('Times New Roman', 20, 'bold'))
         label_pay_sum.grid(row=2, column=1, padx=55, pady=5, sticky='ne')
 
@@ -700,7 +736,7 @@ class Metro(tk.Frame):
         self.controller = controller
 
         photo_image, photo_pl, photo_en = open_images()
-        self.background_label = Label(self, image=photo_image)
+        self.background_label = tk.Label(self, image=photo_image)
         self.background_label.image = photo_image
         self.background_label.grid(rowspan=4, columnspan=2, sticky="news")
 
@@ -709,14 +745,21 @@ class Metro(tk.Frame):
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
 
         self.en_label = Button(self, image=photo_en)
         self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
+        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
-        label_info = tk.Label(self, text="INFO", bg='gold', height=1, width=5, font=('Times New Roman', 18, 'bold'))
-        label_info.grid(row=0, column=1, pady=5, padx=40, sticky='se')
+        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
+                             command=lambda: controller.show_frame("Info"))
+        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
+
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
+                                font=('Times New Roman', 20, "bold"),
+                                command=lambda: controller.show_frame("StartPage"))
+
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         button1_1 = tk.Button(self, text="1-przejazd\n linie zwykłe\n ", height=6, width=20, bg='gold',
                               font=('Times New Roman', 20, "bold"),
@@ -733,15 +776,56 @@ class Metro(tk.Frame):
                               bg='gold', font=('Times New Roman', 20, "bold"),
                               command=lambda: controller.show_frame("TwentyForHours"))
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=15, bg='gold',
+        button1_1.grid(row=1, column=0, pady=30, padx=70, sticky='es')
+        button1_2.grid(row=2, column=0, pady=30, padx=70, sticky='e')
+        button1_3.grid(row=1, column=1, pady=30, padx=70, sticky='ws')
+        button1_4.grid(row=2, column=1, pady=30, padx=70, sticky='w')
+
+        self.columnconfigure(0, weight=0)
+        self.columnconfigure(1, weight=0)
+        self.rowconfigure(0, weight=0)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=0)
+        self.rowconfigure(3, weight=0)
+
+
+class Info(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        photo_image, photo_pl, photo_en = open_images()
+        self.background_label = Label(self, image=photo_image)
+        self.background_label.image = photo_image
+        self.background_label.grid(rowspan=4, columnspan=2, sticky="news")
+
+        label = tk.Label(self, text="Informacje", font=controller.title_font, fg='white', bg='blue')
+        label.grid(row=0, columnspan=3, sticky='nwse')
+
+        self.pl_label = Button(self, image=photo_pl)
+        self.pl_label.image = photo_pl
+        self.pl_label.grid(row=0, column=0, sticky='w', padx=40)
+
+        self.en_label = Button(self, image=photo_en)
+        self.en_label.image = photo_en
+        self.en_label.grid(row=0, column=0, pady=5, padx=100, sticky='w')
+
+        self.label1 = tk.Label(self, text=" Ceny i rodzaje biletów", anchor='w', width=75, height=2,
+                               font=('Times New Roman', 18, "bold")).grid(row=2, columnspan=2, sticky='n')
+        self.label2 = tk.Label(self, text=" Karta miejska", width=75, height=2, anchor='w',
+                               font=('Times New Roman', 18, "bold")).grid(row=2, columnspan=2, sticky='n', pady=65)
+        self.label3 = tk.Label(self, text=' Kontrola Biletowa', width=75, height=2, anchor='w',
+                               font=('Times New Roman', 18, "bold")).grid(row=2, columnspan=2, sticky='n', pady=130)
+        self.label4 = tk.Label(self, text=" Przepisy w ZKM Gdynia", width=75, height=2, anchor='w',
+                               font=('Times New Roman', 18, "bold")).grid(row=2, columnspan=2, sticky='n', pady=195)
+        self.label5 = tk.Label(self, text=" Kontakt", width=75, height=2, anchor='w',
+                               font=('Times New Roman', 18, "bold")).grid(row=2, columnspan=2, sticky="n", pady=260)
+
+        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                 font=('Times New Roman', 20, "bold"),
                                 command=lambda: controller.show_frame("StartPage"))
 
-        button_back.grid(row=3, columnspan=2, pady=5)
-        button1_1.grid(row=1, column=0, pady=30, padx=50, sticky='es')
-        button1_2.grid(row=2, column=0, pady=30, padx=50, sticky='e')
-        button1_3.grid(row=1, column=1, pady=30, padx=50, sticky='ws')
-        button1_4.grid(row=2, column=1, pady=30, padx=50, sticky='w')
+        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
         self.columnconfigure(0, weight=0)
         self.columnconfigure(1, weight=0)
