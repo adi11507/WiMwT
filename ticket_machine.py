@@ -37,9 +37,15 @@ class SampleApp(tk.Tk):
         self.counter_regular = 0
         self.sum = 0
         self.price = 0
+        self.price_metro = 0
+        self.sum_metro = 0
+        self.cnt_ord_red = 0
+        self.cnt_ord_reg = 0
+        self.cnt_ord_red1 = 0
+        self.cnt_ord_reg1 = 0
         self.frames = {}
 
-        for F in (StartPage, Ticket, Card, SeasonTicket, ForPay, Metro, Info):
+        for F in (StartPage, Ticket, Card, SeasonTicket, Metro, Info):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -56,6 +62,12 @@ class SampleApp(tk.Tk):
         self.counter_reduced = 0
         self.sum = 0
         self.price = 0
+        self.price_metro = 0
+        self.sum_metro = 0
+        self.cnt_ord_red = 0
+        self.cnt_ord_reg = 0
+        self.cnt_ord_red1 = 0
+        self.cnt_ord_reg1 = 0
 
 
 class StartPage(tk.Frame):
@@ -114,6 +126,7 @@ class Ticket(tk.Frame):
         self.controller = controller
         self.controller.price = controller.price
         self.controller.sum = controller.sum
+        self.controller.value = 0
         self.controller.counter_regular = controller.counter_regular
         self.controller.counter_reduced = controller.counter_reduced
 
@@ -122,8 +135,8 @@ class Ticket(tk.Frame):
         self.background_label.image = photo_image
         self.background_label.grid(rowspan=4, columnspan=2, sticky="news")
 
-        label = tk.Label(self, text="Wybierz bilet jednorazowy", font=controller.title_font, fg='white', bg='blue')
-        label.grid(row=0, columnspan=3, sticky='nwse')
+        self.label = tk.Label(self, text="Wybierz bilet jednorazowy", font=controller.title_font, fg='white', bg='blue')
+        self.label.grid(row=0, columnspan=3, sticky='nwse')
 
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
@@ -133,20 +146,23 @@ class Ticket(tk.Frame):
         self.en_label.image = photo_en
         self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
 
+        # checking tickets
         self.button1_1 = tk.Button(self, text="1-przejazd\n linie zwykłe", height=6, width=20, bg='gold',
                                    font=('Times New Roman', 20, "bold"),
-                                   command=lambda: [self.__set__(controller.price, 1.6), self.check_relief()])
+                                   command=lambda: [self.__setitem__(1, 1.6), self.check_relief()])
         self.button1_2 = tk.Button(self, text="1-godzinny\n linie zwykłe", height=6, width=20, bg='gold',
                                    font=('Times New Roman', 20, "bold"),
-                                   command=lambda: [self.__set__(controller.price, 1.9), self.check_relief()])
+                                   command=lambda: [self.__setitem__(1, 1.9), self.check_relief()])
         self.button1_3 = tk.Button(self, text="1-godzinny\n lub jednoprzejazdowy\n linie nocne,\n pospieszne",
                                    height=6, width=20, bg='gold',
                                    font=('Times New Roman', 20, "bold"),
-                                   command=lambda: [self.__set__(controller.price, 2.1), self.check_relief()])
+                                   command=lambda: [self.__setitem__(1, 2.1), self.check_relief()])
         self.button1_4 = tk.Button(self, text="24-godzinny\n linie nocne,\n pospieszne, zwykłe", height=6, width=20,
                                    bg='gold', font=('Times New Roman', 20, "bold"),
-                                   command=lambda: [self.__set__(controller.price, 6.5), self.check_relief()])
+                                   command=lambda: [self.__setitem__(1, 6.5), self.check_relief()])
 
+        # checking relief
+        # reduced
         self.frame = tk.Frame(self, bg='blue', bd=4)
         self.label_reduced = tk.Label(self.frame, text='Bilet Ulgowy\n', height=9, width=20, bg='gold',
                                       font=('Times New Roman', 20, 'bold'))
@@ -157,30 +173,68 @@ class Ticket(tk.Frame):
         self.btn_reduced_down = tk.Button(self.frame, text="-", height=2, width=4, font=('Times New Roman', 27, 'bold'),
                                           command=lambda: self.on_click_down(controller.price))
 
+        # regular
         self.frame_reg = tk.Frame(self, bg='blue', bd=4)
         self.label_regular = tk.Label(self.frame_reg, text='Bilet Normalny', height=9, width=20,
                                       font=('Times New Roman', 20, 'bold'), bg='gold')
         self.label_regular_l = tk.Label(self.frame_reg, text=controller.counter_regular, height=2, width=3, bg='white',
                                         font=('Times New Roman', 30, 'bold'))
 
-        self.btn_regular_up = tk.Button(self.frame_reg, text="+", height=2, width=4, font=('Times New Roman', 27, 'bold'),
+        self.btn_regular_up = tk.Button(self.frame_reg, text="+", height=2, width=4,
+                                        font=('Times New Roman', 27, 'bold'),
                                         command=lambda: self.on_click_up_r(controller.price * 2))
 
-        self.btn_regular_down = tk.Button(self.frame_reg, text="-", height=2, width=4, font=('Times New Roman', 27, 'bold'),
+        self.btn_regular_down = tk.Button(self.frame_reg, text="-", height=2, width=4,
+                                          font=('Times New Roman', 27, 'bold'),
                                           command=lambda: self.on_click_down_r(controller.price * 2))
 
+        # set price of ticket
         self.label_zl = tk.Label(self.frame, text=str(self.controller.price) + ' zł', height=1, width=20, bg='gold',
                                  font=('Times New Roman', 20, 'bold'))
         self.label_zl_reg = tk.Label(self.frame_reg, text=str(self.controller.price*2) + ' zł', height=1,
                                      width=20, bg='gold', font=('Times New Roman', 20, 'bold'))
 
+        # calculate sum to pay
         self.frame_pay = tk.Frame(self, bg='blue', bd=1)
         self.label_pay = tk.Label(self.frame_pay, text='Do zapłaty: ', height=5, width=20,
                                   font=('Times New Roman', 20, 'bold'), bg='gold')
 
-        self.label_pay_sum = tk.Label(self.frame_pay, text=str(controller.sum), height=1, width=13,
+        self.label_pay_sum = tk.Label(self.frame_pay, text=str(self.controller.sum), height=1, width=13,
                                       bg='white', font=('Times New Roman', 30, 'bold'))
 
+        # payment
+        self.button_cash = tk.Button(self, text="Gotówka", bg='gold', height=7, width=15,
+                                     font=('Times New Roman', 25, 'bold'), command=self.show_money)
+        self.button_card = tk.Button(self, text="Karta", bg='gold', height=7, width=15,
+                                     font=('Times New Roman', 25, 'bold'),
+                                     command=self.run_progressbar)
+
+        self.frame_money = tk.Frame(self, bg='blue', bd=1)
+        self.ten = tk.Button(self.frame_money, text=" 10 gr", font=('Times New Roman', 20, 'bold'))
+        self.twenty = tk.Button(self.frame_money, text=" 20 gr", font=('Times New Roman', 20, 'bold'))
+        self.fifty = tk.Button(self.frame_money, text=" 50 gr", font=('Times New Roman', 20, 'bold'))
+        self.one = tk.Button(self.frame_money, text="  1 zł  ", font=('Times New Roman', 20, 'bold'))
+        self.two = tk.Button(self.frame_money, text="  2 zł  ", font=('Times New Roman', 20, 'bold'))
+        self.five = tk.Button(self.frame_money, text="  5 zł  ", font=('Times New Roman', 20, 'bold'))
+        self.ten_zl = tk.Button(self.frame_money, text=" 10 zł ", font=('Times New Roman', 20, 'bold'))
+        self.twenty_zl = tk.Button(self.frame_money, text=" 20 zł ", font=('Times New Roman', 20, 'bold'))
+
+        self.card_label = tk.Label(self, image=card_image)
+        self.card_label.image = card_image
+
+        self.s1 = ttk.Style()
+        self.s1.configure("colour.Horizontal.TProgressbar", foreground="white", background="green")
+        self.progress_bar = Progressbar(self, style="colour.Horizontal.TProgressbar",
+                                        orient=VERTICAL, length=281, mode='determinate')
+
+        self.frame_payment = tk.Frame(self, bg='blue', bd=4)
+        self.label_1 = tk.Label(self.frame_payment, text="Postępuj zgodnie z poleceniami na terminalu!",
+                                height=3, width=50, bg='gold',
+                                font=('Times New Roman', 18, 'bold'))
+        self.label1 = tk.Label(self.frame_payment, text="Zapłacono. Odbierz bilety!", height=3, width=50, bg='gold',
+                               font=('Times New Roman', 18, 'bold'))
+
+        # additional buttons
         btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
                              command=lambda: controller.show_frame("Info"))
         btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
@@ -192,9 +246,15 @@ class Ticket(tk.Frame):
         self.button_back_1 = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
                                        font=('Times New Roman', 20, "bold"),
                                        command=lambda: [self.back_to_normal(), self.update(), controller.update()])
+        self.button_back_2 = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
+                                       font=('Times New Roman', 20, "bold"),
+                                       command=lambda: self.back_to_checking())
+        self.button_back_3 = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
+                                       font=('Times New Roman', 20, "bold"),
+                                       command=lambda: self.__setitem__(3, 1))
 
         self.btn_accept = tk.Button(self, text="Zapłać", height=2, width=20, bg='gold',
-                                    command=lambda: [controller.show_frame("ForPay"), self.__set__1(self.controller.sum)],
+                                    command=lambda: self.to_payment(),
                                     font=('Times New Roman', 20, 'bold'))
 
         self.button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
@@ -205,18 +265,13 @@ class Ticket(tk.Frame):
 
         self.rowconfigure(1, weight=1)
 
-    def __set__(self, instance, value):
-        self.controller.price = value
-
-    def __set__1(self, value):
-        self.controller.sum = value
-
     def check_relief(self):
         self.button1_1.grid_remove()
         self.button1_2.grid_remove()
         self.button1_3.grid_remove()
         self.button1_4.grid_remove()
         self.button_back.grid_remove()
+        self.label.configure(text="Wybierz ulgę")
         self.frame.grid(row=1, column=0, padx=50, pady=5, sticky='w')
         self.label_reduced.grid(row=1, column=0, padx=0, pady=5, sticky='')
         self.label_reduced_l.grid(row=2, column=0, padx=0, pady=0, sticky='')
@@ -244,11 +299,9 @@ class Ticket(tk.Frame):
         self.button1_2.grid(row=2, column=0, pady=30, padx=70, sticky='e')
         self.button1_3.grid(row=1, column=1, pady=30, padx=70, sticky='ws')
         self.button1_4.grid(row=2, column=1, pady=30, padx=70, sticky='w')
-        self.frame.grid_remove()
-        self.frame_reg.grid_remove()
-        self.frame_pay.grid_remove()
-        self.btn_accept.grid_remove()
-        self.button_back_1.grid_remove()
+        self.label.configure(text="Wybierz bilet jednorazowy")
+        self.frame.grid_remove(), self.frame_reg.grid_remove(), self.frame_pay.grid_remove()
+        self.btn_accept.grid_remove(), self.button_back_1.grid_remove()
         self.button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
 
     def on_click_up(self, price):
@@ -289,6 +342,84 @@ class Ticket(tk.Frame):
         self.label_regular_l.configure(text="0")
         self.label_reduced_l.configure(text="0")
         self.label_pay_sum.configure(text="0")
+
+    def run_progressbar(self):
+        self.progress_bar.grid(row=1, column=1, padx=150, sticky='e')
+        self.progress_bar["maximum"] = 100
+        self.show_card(), self.button_back_2.grid_remove(), self.label.configure(text="Wybierz sposób płatności")
+        self.button_back_3.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+        for i in range(101):
+            time.sleep(0.055)
+            self.progress_bar["value"] = i
+            self.progress_bar.update()
+            if self.controller.value == 1:
+                self.progress_bar["value"] = 0
+                self.progress_bar.update()
+                self.progress_bar.grid_remove(), self.frame_payment.grid_remove()
+                self.label_1.grid_remove(), self.card_label.grid_remove()
+                self.button_cash.grid(row=1, column=0, padx=5, sticky='e')
+                self.button_card.grid(row=1, column=1, padx=5, sticky='')
+                self.button_back_3.grid_remove(), self.button_back_2.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+                break
+
+        self.controller.value = 0
+
+        if self.progress_bar["maximum"] == self.progress_bar["value"]:
+            self.label_1.grid_remove()
+            self.progress_bar.after(1, self.progress_bar.grid_remove)
+            self.label1.grid(), self.label1.update()
+            time.sleep(3)
+            self.label1.grid_remove()
+            self.button_cash.grid(row=1, column=0, padx=5, sticky='e')
+            self.frame_payment.grid_remove(), self.card_label.grid_remove()
+            self.button_cash.grid_remove(), self.button_card.grid_remove()
+            self.button1_1.grid(row=1, column=0, pady=30, padx=70, sticky='es')
+            self.button1_2.grid(row=2, column=0, pady=30, padx=70, sticky='e')
+            self.button1_3.grid(row=1, column=1, pady=30, padx=70, sticky='ws')
+            self.button1_4.grid(row=2, column=1, pady=30, padx=70, sticky='w')
+            self.label.configure(text="Wybierz bilet jednorazowy")
+            self.button_back_3.grid_remove(), self.button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+            self.update(), self.controller.update()
+            self.controller.show_frame("StartPage")
+
+    def show_card(self):
+        self.frame_payment.grid(row=1, columnspan=2, pady=25, sticky='n')
+        self.label_1.grid(), self.button_cash.grid_remove()
+        self.card_label.grid(row=1, column=0, padx=5, sticky='e')
+
+    def show_money(self):
+        self.button_card.grid_remove()
+        self.frame_pay.grid(row=1, columnspan=2, pady=25, sticky='')
+        self.label_pay.configure(text="Do zapłaty\n pozostało:")
+        self.frame_money.grid(row=1, columnspan=2)
+        self.ten.grid(), self.twenty.grid(), self.fifty.grid(), self.one.grid(), self.two.grid(), self.five.grid(),
+        self.ten_zl.grid(), self.twenty_zl.grid()
+
+    def to_payment(self):
+        self.frame.grid_remove(), self.frame_pay.grid_remove(), self.frame_reg.grid_remove()
+        self.btn_accept.grid_remove(), self.label.configure(text="Wybierz sposób płatności")
+        self.button_cash.grid(row=1, column=0, padx=5, sticky='e')
+        self.button_card.grid(row=1, column=1, padx=5, sticky='')
+        self.button_back_1.grid_remove()
+        self.button_back_2.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+
+    def back_to_checking(self):
+        self.frame.grid(row=1, column=0, padx=50, pady=5, sticky='w')
+        self.frame_reg.grid(row=1, columnspan=2, padx=0, pady=5, sticky='')
+        self.frame_pay.grid(row=1, column=1, padx=50, sticky='e')
+        self.button_cash.grid_remove(), self.button_card.grid_remove()
+        self.button_back_2.grid_remove(), self.frame_money.grid_remove()
+        self.label.configure(text="Wybierz ulgę")
+        self.button_back_1.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+        self.btn_accept.grid(row=2, columnspan=2, pady=30, sticky='s')
+
+    def __setitem__(self, key, value):
+        if key == 1:
+            self.controller.price = value
+        elif key == 2:
+            self.controller.sum = value
+        elif key == 3:
+            self.controller.value = 1
 
 
 class SeasonTicket(tk.Frame):
@@ -387,127 +518,25 @@ class Card(tk.Frame):
             self.progress_bar["value"] = 0
 
 
-class ForPay(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        self.controller.value = 0
-        self.controller.sum = controller.sum
-        photo_image, photo_pl, photo_en, card_image = open_images()
-        self.background_label = Label(self, image=photo_image)
-        self.background_label.image = photo_image
-        self.background_label.grid(rowspan=4, columnspan=2, sticky="news")
-
-        label = tk.Label(self, text="Wybierz rodzaj płatności", font=controller.title_font, fg='white', bg='blue')
-        label.grid(row=0, columnspan=3, sticky='nwse')
-
-        self.pl_label = Button(self, image=photo_pl)
-        self.pl_label.image = photo_pl
-        self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
-
-        self.en_label = Button(self, image=photo_en)
-        self.en_label.image = photo_en
-        self.en_label.grid(row=0, column=0, pady=5, padx=75, sticky='w')
-
-        btn_info = tk.Button(self, text="Info", bg='gold', height=1, width=5, font=('Times New Roman', 20, 'bold'),
-                             command=lambda: controller.show_frame("Info"))
-        btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
-
-        self.button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
-                                     font=('Times New Roman', 20, "bold"),
-                                     command=lambda: [controller.show_frame("Ticket"),
-                                                      self.__set__(self.controller.value, 1)])
-
-        self.button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
-
-        self.button_cash = tk.Button(self, text="Gotówka", bg='gold', height=7, width=15,
-                                     font=('Times New Roman', 25, 'bold'), command=self.show_money)
-
-        self.button_cash.grid(row=1, column=0, padx=5, sticky='e')
-        self.button_card = tk.Button(self, text="Karta", bg='gold', height=7, width=15,
-                                     font=('Times New Roman', 25, 'bold'),
-                                     command=self.run_progressbar)
-        self.button_card.grid(row=1, column=1, padx=5, sticky='')
-
-        self.card_label = tk.Label(self, image=card_image)
-        self.card_label.image = card_image
-
-        self.label_pay_sum = tk.Label(self, text=str(controller.sum), height=1, width=13,
-                                      bg='white', font=('Times New Roman', 30, 'bold'))
-
-        self.s1 = ttk.Style()
-        self.s1.configure("colour.Horizontal.TProgressbar", foreground="white", background="green")
-        self.progress_bar = Progressbar(self, style="colour.Horizontal.TProgressbar",
-                                        orient=VERTICAL, length=281, mode='determinate')
-
-        self.frame = tk.Frame(self, bg='blue', bd=4)
-        self.label_1 = tk.Label(self.frame, text="Postępuj zgodnie z poleceniami na terminalu!",
-                                height=3, width=50, bg='gold',
-                                font=('Times New Roman', 18, 'bold'))
-        self.label1 = tk.Label(self.frame, text="Zapłacono. Odbierz bilety!", height=3, width=50, bg='gold',
-                               font=('Times New Roman', 18, 'bold'))
-
-        self.rowconfigure(1, weight=1)
-
-    def run_progressbar(self):
-        self.progress_bar.grid(row=1, column=1, padx=150, sticky='e')
-        self.progress_bar["maximum"] = 100
-        self.show_card()
-
-        for i in range(101):
-            time.sleep(0.055)
-            self.progress_bar["value"] = i
-            self.progress_bar.update()
-            if self.controller.value == 1:
-                self.progress_bar["value"] = 0
-                self.progress_bar.update()
-                self.progress_bar.grid_remove()
-                self.frame.grid_remove()
-                self.label_1.grid_remove()
-                self.card_label.grid_remove()
-                self.button_cash.grid(row=1, column=0, padx=5, sticky='e')
-                self.button_card.grid(row=1, column=1, padx=5, sticky='')
-                break
-        self.controller.value = 0
-        if self.progress_bar["maximum"] == self.progress_bar["value"]:
-            self.label_1.grid_remove()
-            self.progress_bar.after(1, self.progress_bar.grid_remove)
-            self.label1.grid()
-            self.label1.update()
-            time.sleep(3)
-            self.label1.grid_remove()
-            self.button_cash.grid(row=1, column=0, padx=5, sticky='e')
-            self.frame.grid_remove()
-            self.card_label.grid_remove()
-            self.controller.show_frame("StartPage")
-
-    def show_card(self):
-        self.frame.grid(row=1, columnspan=2, pady=25, sticky='n')
-        self.label_1.grid()
-        self.button_cash.grid_remove()
-        self.card_label.grid(row=1, column=0, padx=5, sticky='e')
-
-    def __set__(self, instance, value):
-        self.controller.value = 1
-
-    def show_money(self):
-        self.button_card.grid_remove()
-        self.label_pay_sum.grid(row=1, column=1)
-
-
 class Metro(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
+        self.controller.price_metro = controller.price_metro
+        self.controller.sum_metro = controller.sum_metro
+        self.controller.cnt_ord_red = controller.cnt_ord_red
+        self.controller.cnt_ord_reg = controller.cnt_ord_reg
+        self.controller.cnt_ord_red1 = controller.cnt_ord_red1
+        self.controller.cnt_ord_reg1 = controller.cnt_ord_reg1
 
         photo_image, photo_pl, photo_en, card_image = open_images()
         self.background_label = tk.Label(self, image=photo_image)
         self.background_label.image = photo_image
         self.background_label.grid(rowspan=4, columnspan=2, sticky="news")
 
-        label = tk.Label(self, text="Wybierz bilet metropolitalny", font=controller.title_font, fg='white', bg='blue')
-        label.grid(row=0, columnspan=3, sticky='nwse')
-
+        self.label = tk.Label(self, text="Wybierz bilet metropolitalny", font=controller.title_font,
+                              fg='white', bg='blue')
+        self.label.grid(row=0, columnspan=3, sticky='nwse')
         self.pl_label = Button(self, image=photo_pl)
         self.pl_label.image = photo_pl
         self.pl_label.grid(row=0, column=0, sticky='w', padx=10)
@@ -520,33 +549,223 @@ class Metro(tk.Frame):
                              command=lambda: controller.show_frame("Info"))
         btn_info.grid(row=0, column=1, pady=5, padx=175, sticky='se')
 
-        button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
-                                font=('Times New Roman', 20, "bold"),
-                                command=lambda: controller.show_frame("StartPage"))
+        self.button1_1 = tk.Button(self, text="1-przejazdowy", height=6, width=20, bg='gold',
+                                   font=('Times New Roman', 20, "bold"),
+                                   command=lambda: self.open_one_pass())
+        self.button1_2 = tk.Button(self, text="24-godzinny", height=6, width=20, bg='gold',
+                                   font=('Times New Roman', 20, "bold"),
+                                   command=lambda: controller.show_frame("HourOrNight"))
+        self.button1_3 = tk.Button(self, text="72-godzinny", height=6, width=20,
+                                   bg='gold', font=('Times New Roman', 20, "bold"),
+                                   command=lambda: controller.show_frame("TwentyForHours"))
 
-        button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+        # frame of reduced one pass
+        self.frame_one_pass_red = tk.Frame(self, bg='blue', bd=3)
+        self.label_one_pass_red = tk.Label(self.frame_one_pass_red, text='Jeden przejazd\n ulgowy', height=9, width=15,
+                                           bg='gold', font=('Times New Roman', 20, 'bold'))
+        self.info_opr = tk.Label(self.frame_one_pass_red, text='ZKM Gdynia + ZTM Gdańsk\n + MZK Wejherowo',
+                                 font=('Times New Roman', 12, ' bold italic'))
+        self.btn_up_ord_red = tk.Button(self.frame_one_pass_red, text="+", height=2, width=3,
+                                        font=('Times New Roman', 21, 'bold'), command=lambda: controller.on_click_up(1.70))
+        self.btn_down_ord_red = tk.Button(self.frame_one_pass_red, text="-", height=2, width=3,
+                                          font=('Times New Roman', 21, 'bold'), command=lambda:
+                                          self.on_click_down(1.70))
+        self.label_ord_red = tk.Label(self.frame_one_pass_red, text=str(self.controller.cnt_ord_red),
+                                      height=2, width=3, bg='white',
+                                      font=('Times New Roman', 24, 'bold'))
 
-        button1_1 = tk.Button(self, text="1-przejazd\n linie zwykłe\n ", height=6, width=20, bg='gold',
-                              font=('Times New Roman', 20, "bold"),
-                              command=lambda: controller.show_frame("OrdinaryOneTicket"))
-        button1_2 = tk.Button(self, text="1-przejazd\n linie pospieszne\n i nocne\n (ZTM+ZKM+MZK)",
-                              height=6, width=20, bg='gold',
-                              font=('Times New Roman', 20, "bold"),
-                              command=lambda: controller.show_frame("OrdinaryHourTicket"))
-        button1_3 = tk.Button(self, text="24-godzinny Komunalny\n (ZTM+ZKM+MZK)",
-                              height=6, width=20, bg='gold',
-                              font=('Times New Roman', 20, "bold"),
-                              command=lambda: controller.show_frame("HourOrNight"))
-        button1_4 = tk.Button(self, text="72-godzinny\n (ZTM+ZKM+MZK)", height=6, width=20,
-                              bg='gold', font=('Times New Roman', 20, "bold"),
-                              command=lambda: controller.show_frame("TwentyForHours"))
+        # frame of regular one pass
+        self.frame_one_pass_reg = tk.Frame(self, bg='blue', bd=3)
+        self.label_one_pass_reg = tk.Label(self.frame_one_pass_reg, text='Jeden przejazd\n normalny', height=9,
+                                           width=15, bg='gold', font=('Times New Roman', 20, 'bold'))
+        self.info_opr1 = tk.Label(self.frame_one_pass_reg, text='ZKM Gdynia + ZTM Gdańsk\n + MZK Wejherowo',
+                                  font=('Times New Roman', 12, ' bold italic'))
+        self.btn_up_ord_reg = tk.Button(self.frame_one_pass_reg, text="+", height=2, width=3,
+                                        font=('Times New Roman', 21, 'bold'),
+                                        command=lambda: self.on_click_up_reg(3.40))
+        self.btn_down_ord_reg = tk.Button(self.frame_one_pass_reg, text="-", height=2, width=3,
+                                          font=('Times New Roman', 21, 'bold'),
+                                          command=lambda: self.on_click_down_reg(3.40))
+        self.label_ord_reg = tk.Label(self.frame_one_pass_reg, text=0, height=2, width=3, bg='white',
+                                      font=('Times New Roman', 24, 'bold'))
 
-        button1_1.grid(row=1, column=0, pady=30, padx=70, sticky='es')
-        button1_2.grid(row=2, column=0, pady=30, padx=70, sticky='e')
-        button1_3.grid(row=1, column=1, pady=30, padx=70, sticky='ws')
-        button1_4.grid(row=2, column=1, pady=30, padx=70, sticky='w')
+        # frame of reduced one pass night
+        self.frame_one_pass_red1 = tk.Frame(self, bg='blue', bd=3)
+        self.label_one_pass_red1 = tk.Label(self.frame_one_pass_red1, text='Jeden przejazd\n linie nocne,'
+                                                                           '\n pospieszne \n ulgowy',
+                                            height=9, width=15, bg='gold', font=('Times New Roman', 20, 'bold'))
+        self.info_opr2 = tk.Label(self.frame_one_pass_red1, text='ZKM Gdynia + ZTM Gdańsk\n + MZK Wejherowo',
+                                  font=('Times New Roman', 12, 'bold italic'))
+        self.btn_up_ord_red1 = tk.Button(self.frame_one_pass_red1, text="+", height=2, width=3,
+                                         font=('Times New Roman', 21, 'bold'),
+                                         command=lambda: self.on_click_up_red1(2.20))
+        self.btn_down_ord_red1 = tk.Button(self.frame_one_pass_red1, text="-", height=2, width=3,
+                                           font=('Times New Roman', 21, 'bold'),
+                                           command=lambda: self.on_click_down_red1(2.20))
+        self.label_ord_red1 = tk.Label(self.frame_one_pass_red1, text=0, height=2, width=3, bg='white',
+                                       font=('Times New Roman', 24, 'bold'))
+
+        # frame of regular one pass night
+        self.frame_one_pass_reg1 = tk.Frame(self, bg='blue', bd=3)
+        self.label_one_pass_reg1 = tk.Label(self.frame_one_pass_reg1, text='Jeden przejazd\n linie nocne,\n'
+                                                                           ' pospieszne \n normalny',
+                                            height=9, width=15, bg='gold', font=('Times New Roman', 20, 'bold'))
+        self.info_opr3 = tk.Label(self.frame_one_pass_reg1, text='ZKM Gdynia + ZTM Gdańsk\n + MZK Wejherowo',
+                                  font=('Times New Roman', 12, ' bold italic'))
+        self.btn_up_ord_reg1 = tk.Button(self.frame_one_pass_reg1, text="+", height=2, width=3,
+                                         font=('Times New Roman', 21, 'bold'),
+                                         command=lambda: self.on_click_up_reg1(4.40))
+        self.btn_down_ord_reg1 = tk.Button(self.frame_one_pass_reg1, text="-", height=2, width=3,
+                                           font=('Times New Roman', 21, 'bold'),
+                                           command=lambda: self.on_click_down_reg1(4.40))
+        self.label_ord_reg1 = tk.Label(self.frame_one_pass_reg1, text=0, height=2, width=3, bg='white',
+                                       font=('Times New Roman', 24, 'bold'))
+
+        # back buttons
+        self.button_back = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
+                                     font=('Times New Roman', 20, "bold"),
+                                     command=lambda: controller.show_frame("StartPage"))
+        self.button_to_metro = tk.Button(self, text="Cofnij", height=1, width=10, bg='gold',
+                                         font=('Times New Roman', 20, "bold"),
+                                         command=lambda: [self.clear_labels(), self.controller.update(),
+                                                          self.back_to_metro()])
+
+        self.btn_accept = tk.Button(self, text="Zapłać", height=2, width=20, bg='gold',
+                                    font=('Times New Roman', 20, 'bold'))
+        # calculate sum to pay
+        self.frame_pay = tk.Frame(self, bg='blue', bd=0.5)
+        self.label_pay = tk.Label(self.frame_pay, text='Do zapłaty: ', height=1, width=20,
+                                  font=('Times New Roman', 20, 'bold'), bg='gold')
+
+        self.label_pay_sum = tk.Label(self.frame_pay, text=str(self.controller.sum_metro), height=1, width=20,
+                                      bg='white', font=('Times New Roman', 20, 'bold'))
+
+        self.button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+        self.button1_1.grid(row=1, columnspan=2, pady=5, padx=5, sticky='')
+        self.button1_2.grid(row=2, column=0, pady=5, padx=80, sticky='n')
+        self.button1_3.grid(row=2, column=1, pady=5, padx=5, sticky='n')
 
         self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+
+    def clear_labels(self):
+        self.label_ord_red.configure(text='0')
+        self.label_ord_reg.configure(text='0')
+        self.label_ord_red1.configure(text='0')
+        self.label_ord_reg1.configure(text='0')
+        self.label_pay_sum.configure(text='0')
+
+    def open_one_pass(self):
+        self.button1_1.grid_remove(), self.button1_2.grid_remove(), self.button1_3.grid_remove()
+        self.button_back.grid_remove(), self.button_to_metro.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+        self.frame_one_pass_red.grid(row=1, column=0, padx=80, sticky='w')
+        self.frame_one_pass_reg.grid(row=1, column=0, sticky='e')
+        self.frame_one_pass_red1.grid(row=1, column=1, padx=70, sticky='w')
+        self.frame_one_pass_reg1.grid(row=1, column=1, padx=80, sticky='e')
+        self.info_opr.grid(row=1, column=0, padx=0, pady=0, sticky='s')
+        self.info_opr1.grid(row=1, column=0, padx=0, pady=0, sticky='s')
+        self.info_opr2.grid(row=1, column=0, padx=0, pady=0, sticky='s')
+        self.info_opr3.grid(row=1, column=0, padx=0, pady=0, sticky='s')
+        self.label_one_pass_red.grid(row=1, column=0, padx=0, pady=0, sticky='')
+        self.label_one_pass_red1.grid(row=1, column=0, padx=0, pady=0, sticky='')
+        self.label_one_pass_reg.grid(row=1, column=0, padx=0, pady=0, sticky='')
+        self.label_one_pass_reg1.grid(row=1, column=0, padx=0, pady=0, sticky='')
+        self.btn_down_ord_red.grid(row=2, column=0, padx=0, pady=0, sticky='w')
+        self.btn_down_ord_red1.grid(row=2, column=0, padx=0, pady=0, sticky='w')
+        self.btn_down_ord_reg.grid(row=2, column=0, padx=0, pady=0, sticky='w')
+        self.btn_down_ord_reg1.grid(row=2, column=0, padx=0, pady=0, sticky='w')
+        self.btn_up_ord_red.grid(row=2, column=0, padx=0, pady=0, sticky='e')
+        self.btn_up_ord_red1.grid(row=2, column=0, padx=0, pady=0, sticky='e')
+        self.btn_up_ord_reg.grid(row=2, column=0, padx=0, pady=0, sticky='e')
+        self.btn_up_ord_reg1.grid(row=2, column=0, padx=0, pady=0, sticky='e')
+        self.label_ord_red.grid(row=2, column=0, padx=0, pady=0, sticky='')
+        self.label_ord_red1.grid(row=2, column=0, padx=0, pady=0, sticky='')
+        self.label_ord_reg.grid(row=2, column=0, padx=0, pady=0, sticky='')
+        self.label_ord_reg1.grid(row=2, column=0, padx=0, pady=0, sticky='')
+        self.frame_pay.grid(row=2, columnspan=2, padx=5, sticky='n')
+        self.btn_accept.grid(row=2, columnspan=2, pady=30, sticky='s')
+        self.label_pay.grid(row=1, column=1, padx=5, pady=5, sticky='s')
+        self.label_pay_sum.grid(row=2, column=1, padx=5, pady=5, sticky='n')
+        self.label.configure(text="Wybierz ulgę biletu metropolitalnego")
+
+    def back_to_metro(self):
+        self.label.configure(text="Wybierz bilet metropolitalny")
+        self.frame_one_pass_reg1.grid_remove(), self.frame_one_pass_reg.grid_remove()
+        self.frame_one_pass_red1.grid_remove(), self.frame_one_pass_red.grid_remove()
+        self.frame_pay.grid_remove()
+        self.button_to_metro.grid_remove(), self.button_back.grid(row=0, column=1, pady=5, padx=10, sticky='se')
+        self.button1_1.grid(row=1, columnspan=2, pady=5, padx=5, sticky='')
+        self.button1_2.grid(row=2, column=0, pady=5, padx=80, sticky='n')
+        self.button1_3.grid(row=2, column=1, pady=5, padx=5, sticky='n')
+        self.btn_accept.grid_remove()
+
+    def on_click_up(self, price):
+        self.controller.cnt_ord_red += 1
+        self.label_ord_red.configure(text=str(self.controller.cnt_ord_red))
+        self.controller.sum_metro += price
+        if self.controller.sum_metro <= 0:
+            self.controller.sum_metro = 0
+        self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
+
+    def on_click_down(self, price):
+        if (self.controller.cnt_ord_red - 1) != -1:
+            self.controller.cnt_ord_red -= 1
+            self.label_ord_red.configure(text=str(self.controller.cnt_ord_red))
+            self.controller.sum_metro -= price
+            if self.controller.sum_metro <= 0:
+                self.controller.sum_metro = 0
+            self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
+
+    def on_click_up_reg(self, price):
+        self.controller.cnt_ord_reg += 1
+        self.label_ord_reg.configure(text=str(self.controller.cnt_ord_reg))
+        self.controller.sum_metro += price
+        if self.controller.sum_metro <= 0:
+            self.controller.sum_metro = 0
+        self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
+
+    def on_click_down_reg(self, price):
+        if (self.controller.cnt_ord_reg - 1) != -1:
+            self.controller.cnt_ord_reg -= 1
+            self.label_ord_reg.configure(text=str(self.controller.cnt_ord_reg))
+            self.controller.sum_metro -= price
+            if self.controller.sum_metro <= 0:
+                self.controller.sum_metro = 0
+            self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
+
+    def on_click_up_red1(self, price):
+        self.controller.cnt_ord_red1 += 1
+        self.label_ord_red1.configure(text=str(self.controller.cnt_ord_red1))
+        self.controller.sum_metro += price
+        if self.controller.sum_metro <= 0:
+            self.controller.sum_metro = 0
+        self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
+
+    def on_click_down_red1(self, price):
+        if (self.controller.cnt_ord_red1 - 1) != -1:
+            self.controller.cnt_ord_red1 -= 1
+            self.label_ord_red1.configure(text=str(self.controller.cnt_ord_red1))
+            self.controller.sum_metro -= price
+            if self.controller.sum_metro <= 0:
+                self.controller.sum_metro = 0
+            self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
+
+    def on_click_up_reg1(self, price):
+        self.controller.cnt_ord_reg1 += 1
+        self.label_ord_reg1.configure(text=str(self.controller.cnt_ord_reg1))
+        self.controller.sum_metro += price
+        if self.controller.sum_metro <= 0:
+            self.controller.sum_metro = 0
+        self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
+
+    def on_click_down_reg1(self, price):
+        if (self.controller.cnt_ord_reg1 - 1) != -1:
+            self.controller.cnt_ord_reg1 -= 1
+            self.label_ord_reg1.configure(text=str(self.controller.cnt_ord_reg1))
+            self.controller.sum_metro -= price
+            if self.controller.sum_metro <= 0:
+                self.controller.sum_metro = 0
+            self.label_pay_sum.configure(text=str("{0:.2f}".format(self.controller.sum_metro)))
 
 
 class Info(tk.Frame):
